@@ -20,6 +20,5 @@ Desktop.ini
 *.psd
 *.ai
 
-# Videos: hero.mp4 ist mit 144 MB ueber dem GitHub-Limit von 100 MB.
-# Erst komprimieren, dann diese Zeile entfernen und neu committen.
-assets/video/*.mp4
+# Rohmaterial der Videos (4K-Originale) bleibt lokal
+_unused/*.mp4
