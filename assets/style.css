@@ -733,11 +733,11 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
 .pagehead--photo{
   background: var(--bg-alt);
   border-bottom: 1px solid var(--border);
-  padding: clamp(3rem,6vw,4.5rem) clamp(1.25rem,4vw,3rem);
+  padding: clamp(2.5rem,5vw,3.75rem) clamp(1.25rem,4vw,3rem);
   color: var(--ink);
-  /* höher als ein normaler Seitenkopf: sonst schneidet object-fit:cover
-     bei breiten Bildschirmen den grössten Teil des Fotos weg */
-  min-height: clamp(400px, 52vw, 820px);
+  /* kompakt halten: der Seitenkopf ist eine Einleitung, kein zweiter Hero.
+     Etwas Bildbeschnitt durch object-fit:cover wird dafür in Kauf genommen. */
+  min-height: clamp(280px, 32vw, 440px);
   display: flex; align-items: center; justify-content: center;
 }
 .pagehead--photo .media{ background: var(--bg-alt); }
