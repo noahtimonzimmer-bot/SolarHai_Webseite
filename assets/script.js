@@ -240,3 +240,30 @@ document.querySelectorAll('.year').forEach(el => {
   } catch (err) { /* privater Modus */ }
   if (flew === '1' && !prefersReducedMotion) document.body.classList.add('is-arriving');
 })();
+
+/* Ankersprung beim Seitenaufruf (z. B. kontakt.html#anfrage).
+   Mit scroll-behavior:smooth bricht der Browser den Sprung ab, sobald waehrend
+   der Animation noch Bilder oder Schriften eintreffen und sich das Layout
+   verschiebt — man landet dann oben statt beim Ziel. Darum nach dem
+   vollstaendigen Laden einmal hart nachfassen. */
+if (location.hash.length > 1) {
+  // Der Browser stellt nach dem Laden seine gemerkte Scrollposition wieder her
+  // und wuerde unseren Sprung gleich wieder ueberschreiben.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  const springeZumAnker = () => {
+    const ziel = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (!ziel) return;
+    const vorher = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    ziel.scrollIntoView();
+    document.documentElement.style.scrollBehavior = vorher;
+  };
+
+  // zweimal nachfassen: direkt nach dem Laden und noch einmal, wenn spaet
+  // eintreffende Bilder das Layout nachtraeglich verschoben haben
+  window.addEventListener('load', () => {
+    requestAnimationFrame(springeZumAnker);
+    setTimeout(springeZumAnker, 250);
+  });
+}

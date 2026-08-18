@@ -100,7 +100,7 @@ button{ font-family: inherit; }
   border-bottom:1px solid var(--border);
 }
 .nav__brand{ display:flex; align-items:center; min-height:44px; }
-.nav__brand img{ height:38px; width:auto; }
+.nav__brand img{ height: clamp(44px, 3.4vw, 62px); width:auto; }
 .nav__links{ display:flex; gap:1.5rem; margin:0 auto; }
 .nav__links a{
   font-size:.95rem; font-weight:600; color: var(--muted);
@@ -148,14 +148,6 @@ button{ font-family: inherit; }
   background: linear-gradient(180deg, rgba(20,18,26,.80) 0%, rgba(20,18,26,.74) 50%, rgba(20,18,26,.85) 100%);
 }
 .hero__inner{ position:relative; z-index:1; max-width: min(1000px, 84vw); }
-/* Wortmarke über dem Titel. Die Datei ist schwarz, auf dem dunklen Video
-   wird sie per Filter nach Weiss gedreht. */
-.hero__logo{
-  /* grosser Abstand nach unten: schiebt die Wortmarke im zentrierten Hero nach oben */
-  display:block; margin:0 auto clamp(2.5rem,6vw,4.5rem);
-  width: clamp(112px, 10vw, 170px); height:auto;
-  filter: brightness(0) invert(1) drop-shadow(0 2px 24px rgba(0,0,0,.5));
-}
 .hero h1{
   /* eigener, hoeherer Deckel als das globale h1: der Hero fuellt den Bildschirm,
      mit 4rem wirkt die Zeile ab etwa 1600px Breite verloren */
@@ -166,7 +158,6 @@ button{ font-family: inherit; }
    "Solarmontage" nicht mehr auf eine Zeile und wuerde mitten im Wort brechen */
 @media (max-width: 360px){
   .hero h1{ font-size: 2.3rem; }
-  .hero__logo{ width: 96px; }
 }
 .hero .lead{
   font-size: clamp(1.15rem, 1.2vw, 1.35rem);
@@ -241,6 +232,8 @@ button{ font-family: inherit; }
 .section--alt{ background: var(--bg-alt); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
 .section__head{ max-width:760px; margin:0 auto 3rem; position:relative; z-index:1; }
 .section__head .lead{ margin-bottom:0; }
+.section__head--compact{ margin-top:2.5rem; margin-bottom:1.2rem; }
+.section__head--compact h3{ margin:0; font-size: clamp(1.45rem, 2.4vw, 2rem); }
 
 /* ---------- Stats ---------- */
 .stats{ max-width: var(--container); margin:0 auto; display:grid; grid-template-columns: repeat(4,1fr); gap:1rem; }
@@ -319,6 +312,13 @@ button{ font-family: inherit; }
 
 /* plan cards */
 .card--plan{ display:flex; flex-direction:column; }
+/* die ganze Karte ist anklickbar: der Link legt sich unsichtbar darueber,
+   behaelt aber seinen eigenen Text fuer Screenreader und Tastatur */
+.plan__link{ margin-top:auto; padding-top:1.2rem; }
+.plan__link::after{ content:""; position:absolute; inset:0; border-radius:inherit; }
+.card--plan:hover{ border-color: var(--violet); }
+.card--plan:focus-within{ outline:2px solid var(--violet); outline-offset:3px; }
+.plan__link:focus-visible{ outline:none; }
 .card--featured{ border-color: var(--violet); box-shadow: 0 2px 6px rgba(124,58,237,.12), 0 18px 40px rgba(124,58,237,.14); }
 .ribbon{
   align-self:flex-start; margin-bottom:.9rem;
@@ -535,6 +535,25 @@ a.contact-card--wide:hover{ border-color: var(--violet-light); }
   display:block; width:100%; height:auto; aspect-ratio:16/9; object-fit:cover;
   border-radius: var(--radius); border:1px solid var(--border); box-shadow: var(--shadow);
 }
+
+/* ---------- Content Videos ---------- */
+.content-video{
+  max-width: var(--container);
+  margin:0 auto 2rem;
+}
+.content-video--wide{ max-width: 420px; }
+.content-video video{
+  display:block;
+  width:100%;
+  aspect-ratio:9/16;
+  object-fit:cover;
+  background: var(--bg-dark);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+.content-video + .cards,
+.content-video + .steps{ margin-top:2rem; }
 
 /* ---------- Footer ---------- */
 .footer{ background: var(--bg-dark); color:#fff; padding:3.5rem clamp(1.25rem,4vw,3rem) 1.5rem; }
