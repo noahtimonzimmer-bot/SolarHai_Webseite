@@ -147,17 +147,39 @@ button{ font-family: inherit; }
 .hero .media__scrim{
   background: linear-gradient(180deg, rgba(20,18,26,.80) 0%, rgba(20,18,26,.74) 50%, rgba(20,18,26,.85) 100%);
 }
-.hero__inner{ position:relative; z-index:1; max-width:900px; }
+.hero__inner{ position:relative; z-index:1; max-width: min(1000px, 84vw); }
 /* Wortmarke über dem Titel. Die Datei ist schwarz, auf dem dunklen Video
    wird sie per Filter nach Weiss gedreht. */
 .hero__logo{
   /* grosser Abstand nach unten: schiebt die Wortmarke im zentrierten Hero nach oben */
   display:block; margin:0 auto clamp(2.5rem,6vw,4.5rem);
-  width: clamp(88px, 11vw, 145px); height:auto;
+  width: clamp(112px, 10vw, 170px); height:auto;
   filter: brightness(0) invert(1) drop-shadow(0 2px 24px rgba(0,0,0,.5));
 }
-.hero h1{ color:#fff; text-shadow: 0 2px 30px rgba(0,0,0,.45); }
-.hero .lead{ font-size:1.12rem; color: rgba(255,255,255,.88); text-shadow: 0 1px 16px rgba(0,0,0,.45); }
+.hero h1{
+  /* eigener, hoeherer Deckel als das globale h1: der Hero fuellt den Bildschirm,
+     mit 4rem wirkt die Zeile ab etwa 1600px Breite verloren */
+  font-size: clamp(2.75rem, 5.4vw, 5.5rem);
+  color:#fff; text-shadow: 0 2px 30px rgba(0,0,0,.45);
+}
+/* sehr schmale Geraete (iPhone SE und aehnlich): bei 2.75rem passt
+   "Solarmontage" nicht mehr auf eine Zeile und wuerde mitten im Wort brechen */
+@media (max-width: 360px){
+  .hero h1{ font-size: 2.3rem; }
+  .hero__logo{ width: 96px; }
+}
+.hero .lead{
+  font-size: clamp(1.15rem, 1.2vw, 1.35rem);
+  max-width: 50ch;
+  color: rgba(255,255,255,.88); text-shadow: 0 1px 16px rgba(0,0,0,.45);
+}
+/* Knoepfe und Schlagworte wachsen mit, sonst schrumpfen sie optisch neben dem Titel */
+.hero .btn--lg{
+  font-size: clamp(1.02rem, .95vw, 1.14rem);
+  padding: clamp(1rem,1.1vw,1.25rem) clamp(2.1rem,2.1vw,2.7rem);
+  min-height: clamp(54px, 3.6vw, 62px);
+}
+.hero .badges li{ font-size: clamp(.86rem, .78vw, .98rem); padding: clamp(.42rem,.45vw,.58rem) clamp(1rem,1.05vw,1.3rem); }
 .hero .btn--ghost{
   background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.42); color:#fff;
   backdrop-filter: blur(6px);
@@ -271,10 +293,23 @@ button{ font-family: inherit; }
 .card--media .more:hover{ background: rgba(255,255,255,.24); border-color:#fff; }
 
 /* media cards (video behind, dark) */
-.card--media{ padding:0; min-height:360px; display:flex; align-items:flex-end; border:none; }
-.card--media .card__body{ position:relative; z-index:1; padding:2rem 1.75rem; }
-.card--media h3{ color:#fff; }
+.card--media{ padding:0; min-height:360px; display:flex; align-items:flex-end; border:none; cursor:pointer; }
+.card__overlay-link{
+  position:absolute; inset:0; z-index:1;
+  border-radius: inherit;
+}
+.card__overlay-link:focus-visible{
+  outline:3px solid var(--violet-light);
+  outline-offset:-6px;
+}
+.card--media .card__body{ position:relative; z-index:2; padding:2rem 1.75rem; pointer-events:none; }
+.card--media h3{
+  color:#fff;
+  font-size: clamp(1.45rem, 2.3vw, 2rem);
+  line-height:1.08;
+}
 .card--media p{ color: rgba(255,255,255,.82); }
+.card--media .more{ position:relative; z-index:3; pointer-events:auto; }
 .tag{
   display:inline-block; margin-top:1rem !important;
   font-size:.85rem; font-weight:600; color: var(--violet-light);
@@ -655,7 +690,7 @@ a.contact-card--wide:hover{ border-color: var(--violet-light); }
   transform: translateY(-10px) scale(1.05);
   filter: drop-shadow(0 18px 22px rgba(124,58,237,.20));
 }
-.obj h3{ margin:.75rem 0 .35rem; }
+.obj h3{ margin:.75rem 0 .45rem; font-size: clamp(1.45rem, 1.9vw, 2rem); }
 .obj p{ margin:0; font-size:.93rem; }
 .obj__enter{
   margin-top:1rem; display:inline-flex; align-items:center; gap:.4rem; min-height:24px;
