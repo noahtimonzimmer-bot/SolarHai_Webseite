@@ -1,0 +1,25 @@
+# Lokale Werkzeug-Einstellungen (enthalten Pfade dieses Rechners)
+.claude/settings.local.json
+skills-lock.json
+
+# Ausrangierte Bilder und Videos: bleiben lokal liegen, gehoeren nicht ins Repo
+_unused/
+
+# Betriebssystem
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editoren
+.vscode/
+.idea/
+*.swp
+
+# Originale und Rohmaterial
+*-original.*
+*.psd
+*.ai
+
+# Videos: hero.mp4 ist mit 144 MB ueber dem GitHub-Limit von 100 MB.
+# Erst komprimieren, dann diese Zeile entfernen und neu committen.
+assets/video/*.mp4
