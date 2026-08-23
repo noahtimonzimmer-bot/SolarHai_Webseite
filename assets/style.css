@@ -964,28 +964,26 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
 .wheel__item:hover .wheel__label{ color: var(--violet); }
 .wheel__item:focus-visible{ outline: 2px solid var(--violet); outline-offset: 6px; border-radius: var(--radius-sm); }
 
-/* Schmale Schirme: Kreis wird zur Liste, sonst ueberlappen die Speichen */
+/* Schmale Schirme: Rad bleibt ein Rad, wird aber kompakter.
+   Radius, Kaestchen und Nabe schrumpfen zusammen, damit sich die
+   sechs Speichen rechnerisch nicht beruehren. */
 @media (max-width: 720px){
-  .wheel{
-    width: 100%; height: auto;
-    display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;
-  }
-  .wheel::before{ display: none; }
-  .wheel__hub{ display: none; }
+  .wheel{ --size: min(360px, 94vw); --r: calc(var(--size) * 0.375); }
+  .wheel__hub{ width: calc(var(--size) * 0.30); padding: 14%; }
   .wheel__item{
-    position: static; width: auto; height: auto; margin: 0;
-    transform: none; justify-content: flex-start;
-    flex-direction: row; gap: .8rem; text-align: left;
-    padding: .9rem 1rem; min-height: 44px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); box-shadow: var(--shadow);
+    width: 96px; height: 88px;
+    margin-left: -48px; margin-top: -44px;
+    gap: .35rem;
   }
-  .wheel__icon{ width: 42px; height: 42px; flex-shrink: 0; box-shadow: none; }
+  .wheel__icon{ width: 46px; height: 46px; }
   .wheel__icon .icon{ width: 1.25rem; height: 1.25rem; }
-  .wheel__label{ font-size: .9rem; }
+  .wheel__label{ font-size: .74rem; line-height: 1.2; }
+  .wheel::before{ inset: 14%; }
 }
-@media (max-width: 400px){
-  .wheel{ grid-template-columns: 1fr; }
+@media (max-width: 380px){
+  .wheel{ --size: 94vw; }
+  .wheel__item{ width: 88px; margin-left: -44px; }
+  .wheel__label{ font-size: .7rem; }
 }
 
 /* ================================================================
@@ -1039,3 +1037,24 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
 
 /* Kacheln folgen direkt auf das Rad, brauchen aber Luft dazwischen */
 .wheel + .cards{ margin-top: clamp(2.5rem, 5vw, 4rem); }
+
+/* Aufzaehlung in einer Medienkachel (z. B. die Geruestarten) */
+.card__list{
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: .5rem 1.25rem; margin: 1.1rem 0 0;
+}
+.card__list li{
+  font-size: .95rem; font-weight: 600; color: #fff;
+  padding-left: 1.2rem; position: relative; line-height: 1.35;
+}
+.card__list li::before{
+  content: ''; position: absolute; left: 0; top: .55em;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--violet-light);
+}
+.card__list span{
+  display: block; font-weight: 500; font-size: .87rem;
+  color: rgba(255,255,255,.72);
+}
+@media (max-width: 640px){
+  .card__list{ grid-template-columns: 1fr; gap: .45rem; }
+}
