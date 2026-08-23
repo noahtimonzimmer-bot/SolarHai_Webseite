@@ -51,8 +51,43 @@
   </section>
 
   <section class="section">
-    <div class="cards cards--2">
-      <article class="card card--media card--hero">
+    <div class="section__head">
+      <h2>Sechs Leistungen, ein Team.</h2>
+      <p class="lead">Wählen Sie aus, was Sie interessiert. Sie springen direkt zur passenden Stelle.</p>
+    </div>
+
+    <nav class="wheel" aria-label="Direkt zu einer Leistung">
+      <span class="wheel__hub">
+        <img src="assets/img/logo-black.png" alt="SolarHai" width="140" height="75">
+      </span>
+      <a class="wheel__item" style="--a:0deg" href="#schraegdach">
+        <span class="wheel__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12L12 5l9 7"/><path d="M6 11v8h12v-8"/><path d="M9.5 13.5h5v3h-5z"/></svg></span>
+        <span class="wheel__label">Schrägdach</span>
+      </a>
+      <a class="wheel__item" style="--a:60deg" href="#flachdach">
+        <span class="wheel__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h18v10H3z"/><path d="M3 9l9-4 9 4"/><path d="M7 13h4v3H7z"/><path d="M14 13h3v3h-3z"/></svg></span>
+        <span class="wheel__label">Flachdach</span>
+      </a>
+      <a class="wheel__item" style="--a:120deg" href="#geruest">
+        <span class="wheel__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3v18M19 3v18M12 3v18"/><path d="M5 8h14M5 14h14"/></svg></span>
+        <span class="wheel__label">Solargerüst</span>
+      </a>
+      <a class="wheel__item" style="--a:180deg" href="#dachsanierung">
+        <span class="wheel__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M6 10v9h12v-9"/><path d="M9 19v-5h6v5"/></svg></span>
+        <span class="wheel__label">Dachsanierung</span>
+      </a>
+      <a class="wheel__item" style="--a:240deg" href="#speicher">
+        <span class="wheel__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="12" rx="2"/><path d="M9 4h6M9 11v4M15 11v4"/></svg></span>
+        <span class="wheel__label">Speicher</span>
+      </a>
+      <a class="wheel__item" style="--a:300deg" href="#dachfenster">
+        <span class="wheel__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13L13 5l7 6"/><path d="M7 12v8h11v-7"/><path d="M10 14h5v5h-5z"/><path d="M12.5 14v5"/></svg></span>
+        <span class="wheel__label">Dachfenster</span>
+      </a>
+    </nav>
+
+    <div class="cards cards--stack">
+      <article class="card card--media card--hero" id="schraegdach">
         <a class="card__overlay-link" href="kontakt.html#anfrage" aria-label="Anfrage starten: Schrägdach-Solaranlagen"></a>
         <div class="media media--dark" aria-hidden="true">
           <img class="media__img" src="assets/img/schraegdach.avif" alt="" width="1886" height="1060" loading="lazy" decoding="async">
@@ -64,8 +99,7 @@
           <a class="more" href="wissen.html#schraegdach">Wie kommen die Module aufs Ziegeldach?<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </article>
-
-      <article class="card card--media">
+      <article class="card card--media card--hero" id="flachdach">
         <a class="card__overlay-link" href="kontakt.html#anfrage" aria-label="Anfrage starten: Flachdach-Solaranlagen"></a>
         <div class="media media--dark" aria-hidden="true">
           <img class="media__img" src="assets/img/flachdach.avif" alt="" width="1886" height="1060" loading="lazy" decoding="async">
@@ -77,8 +111,19 @@
           <a class="more" href="wissen.html#flachdach">Wie hält das auf einem flachen Dach?<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </article>
-
-      <article class="card card--media">
+      <article class="card card--media card--hero" id="geruest">
+        <a class="card__overlay-link" href="kontakt.html#anfrage" aria-label="Anfrage starten: Solargerüst"></a>
+        <div class="media media--dark" aria-hidden="true">
+          <img class="media__img" src="assets/img/geruest-team.jpg" alt="" width="1600" height="1069" loading="lazy" decoding="async">
+          <div class="media__scrim media__scrim--dark"></div>
+        </div>
+        <div class="card__body">
+          <h3>Solargerüst</h3>
+          <p>Steildach, Ortgang, Fassade oder Flachdach: Wir stellen das passende Gerüst selbst. Ob Industriehalle, Ein- oder Mehrfamilienhaus, wir finden die passende Lösung.</p>
+          <a class="more" href="solargeruest.html">Was kostet das Gerüst?<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </article>
+      <article class="card card--media card--hero" id="dachsanierung">
         <a class="card__overlay-link" href="kontakt.html#anfrage" aria-label="Anfrage starten: Dachsanierungen"></a>
         <div class="media media--dark" aria-hidden="true">
           <img class="media__img" src="assets/img/dachsanierung.jpg" alt="" width="1600" height="1069" loading="lazy" decoding="async">
@@ -86,13 +131,12 @@
         </div>
         <div class="card__body">
           <h3>Dachsanierungen</h3>
-          <p>Verbesserte Wärmedämmung &amp; Energieeffizienz und eine spürbare Wertsteigerung Ihrer Immobilie. Inklusive Demontage alter Materialien und fachgerechter Entsorgung, auch asbesthaltiger Materialien. Auf Wunsch mit direkter Integration Ihrer Photovoltaikanlage.</p>
+          <p>Verbesserte Wärmedämmung &amp; Energieeffizienz und eine spürbare Wertsteigerung Ihrer Immobilie. Inklusive Demontage alter Materialien und fachgerechter Entsorgung, auch asbesthaltiger Materialien.</p>
           <p class="tag">10% Rabatt auf die Solaranlage bei gleichzeitiger Dachsanierung</p>
           <a class="more" href="wissen.html#dachsanierung">Wie läuft eine Dachsanierung ab?<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </article>
-
-      <article class="card card--media">
+      <article class="card card--media card--hero" id="speicher">
         <a class="card__overlay-link" href="kontakt.html#anfrage" aria-label="Anfrage starten: Speichersysteme"></a>
         <div class="media media--dark" aria-hidden="true">
           <img class="media__img" src="assets/img/speicher.jpg" alt="" width="1600" height="1069" loading="lazy" decoding="async">
@@ -104,9 +148,8 @@
           <a class="more" href="wissen.html#speicher">Wozu brauche ich einen Speicher?<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         </div>
       </article>
-
-      <article class="card card--media">
-        <a class="card__overlay-link" href="wissen.html#dachfenster" aria-label="Mehr zur Dachfenster-Installation"></a>
+      <article class="card card--media card--hero" id="dachfenster">
+        <a class="card__overlay-link" href="kontakt.html#anfrage" aria-label="Anfrage starten: Dachfenster-Installation"></a>
         <div class="media media--dark" aria-hidden="true">
           <img class="media__img" src="assets/img/dachfenster.jpg" alt="" width="1448" height="1086" loading="lazy" decoding="async">
           <div class="media__scrim media__scrim--dark"></div>
@@ -120,7 +163,6 @@
       </article>
     </div>
   </section>
-
 
   <section class="section section--alt">
     <div class="section__head">

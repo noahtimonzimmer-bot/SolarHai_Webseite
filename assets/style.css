@@ -906,17 +906,97 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
 /* ================================================================
    Breite Medienkarte (füllt die letzte Zeile im Zweispalter)
    ================================================================ */
-/* Leitkachel: die Solaranlage fuehrt die Seite an.
-   Sie belegt zwei Rasterzellen — damit gehen 5 Karten glatt in 3 Reihen auf. */
-.card--hero{
-  grid-column: 1 / -1;
-  min-height: 440px;
+/* ================================================================
+   Leistungsrad — Logo in der Mitte, Leistungen rundherum
+   ================================================================ */
+.wheel{
+  --size: min(600px, 88vw);
+  --r: calc(var(--size) * 0.355);
+  position: relative;
+  width: var(--size); height: var(--size);
+  margin: 0 auto;
+  display: block;
 }
+/* Ring, auf dem die Leistungen sitzen */
+.wheel::before{
+  content: ''; position: absolute; inset: 12%;
+  border: 1px dashed var(--border-strong); border-radius: 50%;
+}
+.wheel__hub{
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(var(--size) * 0.34); aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 50%; box-shadow: var(--shadow-lg);
+  padding: 12%;
+}
+.wheel__hub img{ width: 100%; height: auto; }
+
+.wheel__item{
+  position: absolute; left: 50%; top: 50%;
+  /* feste Groesse: nur so faellt der Kaestchen-Mittelpunkt exakt auf den Kreis,
+     sonst verschieben unterschiedlich hohe Beschriftungen die Winkel */
+  width: 136px; height: 112px;
+  margin-left: -68px; margin-top: -56px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: .5rem; text-align: center;
+  /* auf den Kreis setzen, dann zurueckdrehen damit die Schrift aufrecht bleibt */
+  transform: rotate(var(--a)) translateY(calc(var(--r) * -1)) rotate(calc(var(--a) * -1));
+}
+.wheel__icon{
+  display: flex; align-items: center; justify-content: center;
+  width: 62px; height: 62px; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--violet); box-shadow: var(--shadow);
+  transition: transform .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+}
+.wheel__icon .icon{ width: 1.7rem; height: 1.7rem; }
+.wheel__label{
+  font-weight: 700; font-size: .93rem; letter-spacing: -.01em;
+  color: var(--ink); line-height: 1.25;
+}
+.wheel__item:hover .wheel__icon,
+.wheel__item:focus-visible .wheel__icon{
+  transform: translateY(-3px) scale(1.06);
+  border-color: var(--violet); background: var(--violet-wash);
+}
+.wheel__item:hover .wheel__label{ color: var(--violet); }
+.wheel__item:focus-visible{ outline: 2px solid var(--violet); outline-offset: 6px; border-radius: var(--radius-sm); }
+
+/* Schmale Schirme: Kreis wird zur Liste, sonst ueberlappen die Speichen */
+@media (max-width: 720px){
+  .wheel{
+    width: 100%; height: auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;
+  }
+  .wheel::before{ display: none; }
+  .wheel__hub{ display: none; }
+  .wheel__item{
+    position: static; width: auto; height: auto; margin: 0;
+    transform: none; justify-content: flex-start;
+    flex-direction: row; gap: .8rem; text-align: left;
+    padding: .9rem 1rem; min-height: 44px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); box-shadow: var(--shadow);
+  }
+  .wheel__icon{ width: 42px; height: 42px; flex-shrink: 0; box-shadow: none; }
+  .wheel__icon .icon{ width: 1.25rem; height: 1.25rem; }
+  .wheel__label{ font-size: .9rem; }
+}
+@media (max-width: 400px){
+  .wheel{ grid-template-columns: 1fr; }
+}
+
+/* ================================================================
+   Leistungskacheln: alle gleich gross, volle Breite
+   ================================================================ */
+.cards--stack{ grid-template-columns: 1fr; }
+.card--hero{ min-height: 440px; }
 .card--hero .card__body{ max-width: 56ch; padding: 2.25rem 2rem; }
 .card--hero h3{ font-size: clamp(1.7rem, 3vw, 2.6rem); }
 .card--hero .card__body > p{ font-size: 1.05rem; }
 
-/* kleine Zeile ueber dem Titel, kennzeichnet die Zusatzleistung */
 .card__kicker{
   margin: 0 0 .45rem !important;
   font-size: .8rem; font-weight: 600; letter-spacing: .02em;
@@ -956,3 +1036,6 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
 @media (max-width: 780px){
   .saving{ grid-template-columns: 1fr; }
 }
+
+/* Kacheln folgen direkt auf das Rad, brauchen aber Luft dazwischen */
+.wheel + .cards{ margin-top: clamp(2.5rem, 5vw, 4rem); }
