@@ -925,21 +925,24 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
 .wheel__hub{
   position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%);
-  width: calc(var(--size) * 0.46); aspect-ratio: 1;
+  width: calc(var(--size) * 0.42); aspect-ratio: 1;
   display: flex; align-items: center; justify-content: center;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 50%; box-shadow: var(--shadow-lg);
 }
-/* 76%: die Ecken des breiten Schriftzugs bleiben knapp innerhalb des Kreises */
-.wheel__hub img{ width: 76%; height: auto; }
+/* 72%: die Ecken des breiten Schriftzugs bleiben innerhalb des Kreises */
+.wheel__hub img{ width: 72%; height: auto; display: block; }
 
 .wheel__item{
   position: absolute; left: 50%; top: 50%;
   /* feste Groesse: nur so faellt der Kaestchen-Mittelpunkt exakt auf den Kreis,
      sonst verschieben unterschiedlich hohe Beschriftungen die Winkel */
-  width: 136px; height: 112px;
-  margin-left: -68px; margin-top: -56px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 136px; height: 124px;
+  margin-left: -68px; margin-top: -62px;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  /* 31px = halbe Symbolhoehe: damit faellt die Symbolmitte auf die Kaestchenmitte
+     und damit exakt auf den Kreis. Sonst sitzt der Symbolring hoeher als die Nabe. */
+  padding-top: 31px;
   gap: .5rem; text-align: center;
   /* auf den Kreis setzen, dann zurueckdrehen damit die Schrift aufrecht bleibt */
   transform: rotate(var(--a)) translateY(calc(var(--r) * -1)) rotate(calc(var(--a) * -1));
@@ -969,10 +972,11 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
    sechs Speichen rechnerisch nicht beruehren. */
 @media (max-width: 720px){
   .wheel{ --size: min(360px, 94vw); --r: calc(var(--size) * 0.375); }
-  .wheel__hub{ width: calc(var(--size) * 0.40); }
+  .wheel__hub{ width: calc(var(--size) * 0.38); }
   .wheel__item{
-    width: 96px; height: 88px;
-    margin-left: -48px; margin-top: -44px;
+    width: 96px; height: 100px;
+    margin-left: -48px; margin-top: -50px;
+    padding-top: 27px;   /* halbe Symbolhoehe (46px) */
     gap: .35rem;
   }
   .wheel__icon{ width: 46px; height: 46px; }
@@ -982,7 +986,7 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
 }
 @media (max-width: 380px){
   .wheel{ --size: 94vw; }
-  .wheel__hub{ width: calc(var(--size) * 0.38); }
+  .wheel__hub{ width: calc(var(--size) * 0.36); }
   .wheel__item{ width: 88px; margin-left: -44px; }
   .wheel__label{ font-size: .7rem; }
 }
