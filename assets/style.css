@@ -930,8 +930,13 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 50%; box-shadow: var(--shadow-lg);
 }
-/* 72%: die Ecken des breiten Schriftzugs bleiben innerhalb des Kreises */
-.wheel__hub img{ width: 72%; height: auto; display: block; }
+/* 64%: die Ecken des breiten Schriftzugs bleiben innerhalb des Kreises.
+   translateY(12%): die Tinte des Logos liegt im oberen Teil der Bilddatei
+   (das untere Fuenftel traegt nur 2.5% der Tinte). Geometrisch zentriert
+   wirkt der Schriftzug daher zu hoch; 12% der Bildhoehe ruecken den
+   Schwerpunkt auf die Nabenmitte. Prozent bezieht sich hier auf die
+   eigene Hoehe, die Korrektur skaliert also mit. */
+.wheel__hub img{ width: 64%; height: auto; display: block; transform: translateY(12%); }
 
 .wheel__item{
   position: absolute; left: 50%; top: 50%;
