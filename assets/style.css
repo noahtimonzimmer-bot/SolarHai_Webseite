@@ -925,13 +925,13 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
 .wheel__hub{
   position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%);
-  width: calc(var(--size) * 0.34); aspect-ratio: 1;
+  width: calc(var(--size) * 0.46); aspect-ratio: 1;
   display: flex; align-items: center; justify-content: center;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 50%; box-shadow: var(--shadow-lg);
-  padding: 12%;
 }
-.wheel__hub img{ width: 100%; height: auto; }
+/* 76%: die Ecken des breiten Schriftzugs bleiben knapp innerhalb des Kreises */
+.wheel__hub img{ width: 76%; height: auto; }
 
 .wheel__item{
   position: absolute; left: 50%; top: 50%;
@@ -969,7 +969,7 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
    sechs Speichen rechnerisch nicht beruehren. */
 @media (max-width: 720px){
   .wheel{ --size: min(360px, 94vw); --r: calc(var(--size) * 0.375); }
-  .wheel__hub{ width: calc(var(--size) * 0.30); padding: 14%; }
+  .wheel__hub{ width: calc(var(--size) * 0.40); }
   .wheel__item{
     width: 96px; height: 88px;
     margin-left: -48px; margin-top: -44px;
@@ -982,6 +982,7 @@ body.is-arriving main{ animation: arrive .45s var(--ease) both; }
 }
 @media (max-width: 380px){
   .wheel{ --size: 94vw; }
+  .wheel__hub{ width: calc(var(--size) * 0.38); }
   .wheel__item{ width: 88px; margin-left: -44px; }
   .wheel__label{ font-size: .7rem; }
 }
