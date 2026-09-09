@@ -1,0 +1,400 @@
+/* ============================================================
+   SolarHai — Motion Layer (alternative)
+   Ergaenzt style.css. Alle Bewegungen laufen ueber transform,
+   opacity, clip-path und filter, damit sie auf der GPU bleiben.
+   ============================================================ */
+
+:root{
+  /* Kurven: die eingebauten CSS-Easings sind zu weich fuer UI. */
+  --ease-out-strong: cubic-bezier(.23, 1, .32, 1);
+  --ease-in-out-strong: cubic-bezier(.77, 0, .175, 1);
+  --ease-drawer: cubic-bezier(.32, .72, 0, 1);
+  --ease-swift: cubic-bezier(.4, 0, .2, 1);
+
+  /* Klickpunkt des letzten Navigationslinks, fuer den Seitenuebergang. */
+  --vt-x: 50%;
+  --vt-y: 50%;
+}
+
+/* ------------------------------------------------------------
+   1. Seitenuebergaenge (View Transitions, dokumentuebergreifend)
+   ------------------------------------------------------------ */
+@view-transition{ navigation: auto; }
+
+@media (prefers-reduced-motion: no-preference){
+
+  ::view-transition-image-pair(root){ isolation: auto; }
+  ::view-transition-old(root),
+  ::view-transition-new(root){
+    animation: none;
+    mix-blend-mode: normal;
+    backface-visibility: hidden;
+  }
+
+  /* Die alte Seite sinkt weg und wird unscharf, die neue schiebt sich
+     als Kreis vom angeklickten Link aus darueber. */
+  ::view-transition-old(root){
+    animation: vt-leave 460ms var(--ease-in-out-strong) forwards;
+  }
+  ::view-transition-new(root){
+    animation: vt-enter 620ms var(--ease-out-strong) forwards;
+    z-index: 2;
+  }
+
+  @keyframes vt-leave{
+    to{ transform: scale(.92); opacity: .35; filter: blur(8px); }
+  }
+  @keyframes vt-enter{
+    from{
+      clip-path: circle(0% at var(--vt-x) var(--vt-y));
+      transform: scale(1.06);
+      filter: blur(12px);
+    }
+    to{
+      clip-path: circle(140% at var(--vt-x) var(--vt-y));
+      transform: scale(1);
+      filter: blur(0);
+    }
+  }
+
+  /* Bestandteile, die auf jeder Seite gleich sind, werden gemorpht
+     statt neu gezeichnet — die Navigation bleibt dadurch stehen. */
+  .announce{ view-transition-name: sh-announce; }
+  .nav{ view-transition-name: sh-nav; }
+  .nav__brand img{ view-transition-name: sh-brand; }
+  .footer{ view-transition-name: sh-footer; }
+
+  ::view-transition-group(sh-nav),
+  ::view-transition-group(sh-brand),
+  ::view-transition-group(sh-announce),
+  ::view-transition-group(sh-footer){
+    animation-duration: 460ms;
+    animation-timing-function: var(--ease-out-strong);
+    z-index: 3;
+  }
+}
+
+/* ------------------------------------------------------------
+   2. Ankunft — die Seite baut sich einmal auf
+   ------------------------------------------------------------ */
+.motion .announce{
+  animation: chrome-drop 520ms var(--ease-out-strong) both;
+}
+.motion .nav{
+  animation: chrome-drop 520ms var(--ease-out-strong) 60ms both;
+}
+@keyframes chrome-drop{
+  from{ transform: translateY(-100%); opacity: 0; }
+}
+/* Nach einem Seitenwechsel steht die Kopfzeile schon — nicht neu einfliegen. */
+html[data-vt="1"] .nav,
+html[data-vt="1"] .announce{ animation: none; }
+
+/* ------------------------------------------------------------
+   3. Titel: Wort fuer Wort aus einer Maske heraus
+   ------------------------------------------------------------ */
+.split{ display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; }
+.split__i{
+  display: inline-block;
+  transform: translateY(110%) rotate(4deg);
+  opacity: 0;
+  will-change: transform;
+}
+.split.is-in .split__i{
+  animation: word-rise 760ms var(--ease-out-strong) both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes word-rise{
+  to{ transform: translateY(0) rotate(0); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce){
+  .split__i{ transform: none; opacity: 1; }
+}
+
+/* ------------------------------------------------------------
+   4. Eintritte: gestaffelt, aus der Tiefe
+   ------------------------------------------------------------ */
+.m-rise{
+  opacity: 0;
+  transform: translateY(22px) scale(.985);
+  filter: blur(6px);
+  transition:
+    opacity 620ms var(--ease-out-strong) var(--d, 0ms),
+    transform 620ms var(--ease-out-strong) var(--d, 0ms),
+    filter 620ms var(--ease-out-strong) var(--d, 0ms);
+}
+.m-rise.is-in{
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+@media (prefers-reduced-motion: reduce){
+  .m-rise{ opacity: 1; transform: none; filter: none; }
+}
+
+/* Bilder und Videos schieben sich von unten frei */
+.m-clip{
+  clip-path: inset(0 0 100% 0);
+  transform: scale(1.1);
+  transition: clip-path 900ms var(--ease-out-strong) var(--d, 0ms),
+              transform 1100ms var(--ease-out-strong) var(--d, 0ms);
+}
+.m-clip.is-in{
+  clip-path: inset(0 0 0 0);
+  transform: scale(1);
+}
+@media (prefers-reduced-motion: reduce){
+  .m-clip{ clip-path: none; transform: none; }
+}
+
+/* ------------------------------------------------------------
+   5. Scrollgetriebene Effekte (nur wo der Browser sie kann)
+   ------------------------------------------------------------ */
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+
+    /* Grosse Bildflaechen atmen mit dem Scrollen */
+    .card--media .media__img,
+    .project__img,
+    .content-video video{
+      animation: slow-zoom linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+    @keyframes slow-zoom{
+      from{ transform: scale(1.12); }
+      to{ transform: scale(1); }
+    }
+  }
+}
+
+/* ------------------------------------------------------------
+   6. Fortschrittsbalken am oberen Rand
+   ------------------------------------------------------------ */
+.progress{
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 3px;
+  z-index: 200;
+  background: linear-gradient(90deg, var(--violet), var(--violet-light));
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+@supports (animation-timeline: scroll()){
+  .progress{
+    animation: bar-grow linear both;
+    animation-timeline: scroll(root block);
+  }
+  @keyframes bar-grow{ to{ transform: scaleX(1); } }
+}
+@media (prefers-reduced-motion: reduce){ .progress{ display: none; } }
+
+/* ------------------------------------------------------------
+   7. Navigation: verdichtet sich beim Scrollen
+   ------------------------------------------------------------ */
+.nav{
+  transition: box-shadow 240ms var(--ease-swift),
+              backdrop-filter 240ms var(--ease-swift);
+}
+.nav.is-condensed{
+  box-shadow: 0 1px 0 var(--border), 0 12px 32px rgba(20,18,26,.10);
+  backdrop-filter: saturate(1.4) blur(14px);
+}
+.nav__brand img{
+  transform-origin: left center;
+  transition: transform 240ms var(--ease-out-strong);
+}
+.nav.is-condensed .nav__brand img{ transform: scale(.86); }
+
+/* Unterstrich wischt unter den Navigationslinks durch */
+@media (hover: hover) and (pointer: fine){
+  .nav__links a{ position: relative; }
+  .nav__links a::after{
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -4px;
+    height: 2px;
+    background: var(--violet);
+    border-radius: 2px;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 260ms var(--ease-out-strong);
+  }
+  .nav__links a:hover::after,
+  .nav__links a[aria-current="page"]::after{ clip-path: inset(0 0 0 0); }
+}
+
+/* ------------------------------------------------------------
+   8. Knoepfe: reagieren auf den Druck, Glanz wischt durch
+   ------------------------------------------------------------ */
+.btn{
+  position: relative;
+  overflow: hidden;
+  transition: transform 160ms var(--ease-out-strong),
+              box-shadow 220ms var(--ease-swift),
+              background-color 200ms ease,
+              color 200ms ease;
+}
+.btn:active{ transform: scale(.97); }
+.btn::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.42) 50%, transparent 62%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine){
+  .btn:hover::before{ animation: sheen 720ms var(--ease-out-strong); }
+  .btn--lg:hover{ box-shadow: var(--shadow-lg); }
+}
+@keyframes sheen{ to{ transform: translateX(130%); } }
+
+/* Der magnetische Versatz kommt aus motion.js */
+.btn--lg{ transform: translate3d(var(--mx, 0px), var(--my, 0px), 0); }
+.btn--lg:active{ transform: translate3d(var(--mx, 0px), var(--my, 0px), 0) scale(.97); }
+
+/* ------------------------------------------------------------
+   9. Karten: heben ab und tragen ein Licht mit dem Zeiger
+   ------------------------------------------------------------ */
+.card,
+.project,
+.contact-card{
+  position: relative;
+  transition: transform 320ms var(--ease-out-strong),
+              box-shadow 320ms var(--ease-swift),
+              border-color 320ms ease;
+}
+@media (hover: hover) and (pointer: fine){
+  .card:hover,
+  .project:hover,
+  .contact-card:hover{
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+  }
+  .card:hover .card__icon{ transform: scale(1.08) rotate(-4deg); }
+}
+.card__icon{ transition: transform 280ms var(--ease-out-strong); }
+
+.glow{
+  position: absolute;
+  top: 0; left: 0;
+  width: 320px; height: 320px;
+  margin: -160px 0 0 -160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,.16), transparent 68%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms var(--ease-swift);
+  z-index: 0;
+}
+@media (hover: hover) and (pointer: fine){
+  .card:hover > .glow,
+  .project:hover > .glow,
+  .contact-card:hover > .glow{ opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce){ .glow{ display: none; } }
+
+/* ------------------------------------------------------------
+   10. Kleinteile
+   ------------------------------------------------------------ */
+/* Hero-Merkmale laufen nacheinander ein */
+.motion .hero .badges li{
+  animation: chip-in 520ms var(--ease-out-strong) both;
+  animation-delay: calc(620ms + var(--i, 0) * 60ms);
+}
+@keyframes chip-in{
+  from{ transform: translateY(10px); opacity: 0; }
+}
+
+/* Der Scrollhinweis pulsiert dezent weiter */
+.hero__scroll .icon{ animation: hint 2.4s var(--ease-in-out-strong) infinite; }
+@keyframes hint{
+  0%, 100%{ transform: translateY(0); opacity: .75; }
+  50%{ transform: translateY(5px); opacity: 1; }
+}
+
+/* FAQ oeffnet sich, statt zu springen */
+.faq__item[open] > *:not(summary){
+  animation: faq-open 260ms var(--ease-out-strong) both;
+  transform-origin: top;
+}
+@keyframes faq-open{
+  from{ opacity: 0; transform: translateY(-6px); }
+}
+
+/* Ziffern der Schritte drehen beim Erscheinen ein */
+.step.is-in .step__num{
+  animation: num-pop 620ms var(--ease-out-strong) 120ms both;
+}
+@keyframes num-pop{
+  from{ transform: scale(.86) rotate(-10deg); opacity: 0; }
+}
+
+/* ------------------------------------------------------------
+   11. Titelbild: in das Solarmodul des Fotos zoomen
+   Das Bild steht fest im Blick, waehrend die Seite darunter normal
+   scrollt. Die Seite wird dadurch keinen Pixel laenger.
+   ------------------------------------------------------------ */
+.hero--dive{
+  overflow: visible;              /* die feste Ebene darf hinausragen */
+  background: var(--bg-dark);
+}
+/* Text und Hinweis bleiben vor dem Titelbild, bis sie weggeblendet sind.
+   Der Hinweis ist schon absolut gesetzt — nur die Ebene anheben, sonst
+   faellt er aus seiner Verankerung am unteren Rand. */
+.hero--dive .hero__inner{ position: relative; z-index: 51; }
+.hero--dive .hero__scroll{ z-index: 51; }
+
+.dive{
+  position: fixed;
+  inset: 0;
+  /* Ueber den folgenden Abschnitten, aber unter der Navigation (100).
+     Mit z-index 0 wuerde der spaeter im Markup stehende Abschnitt
+     darueber malen, obwohl die Ebene fest im Bild steht. */
+  z-index: 50;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg-dark);
+}
+/* Ist der Hero durch, wird die Ebene ganz abgeschaltet:
+   ein unsichtbares fixed-Element wuerde sonst weiter mitgemalt. */
+.dive.is-done{ visibility: hidden; }
+
+.dive picture{ display: contents; }
+.dive__photo{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Die globale Regel img{max-width:100%} wuerde den selbst gerechneten
+     Zuschnitt aus motion.js wieder auf die Rahmenbreite stauchen. */
+  max-width: none;
+  /* Den Punkt setzt motion.js: er wird aus dem Zuschnitt des Bildes
+     berechnet, damit der Zoom wirklich auf dem Modul landet. */
+  transform-origin: 86% 72%;
+  will-change: transform, filter;
+}
+/* Derselbe dunkle Schleier, den der Hero schon fuer das Video benutzt hat —
+   sonst steht die weisse Schrift auf Himmel und Hauswand. */
+.dive__scrim{
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(20,18,26,.90) 0%, rgba(20,18,26,.55) 40%, rgba(20,18,26,.30) 72%, rgba(20,18,26,.45) 100%),
+    linear-gradient(to right, rgba(20,18,26,.66) 0%, rgba(20,18,26,.24) 52%, rgba(20,18,26,0) 82%);
+}
+
+/* Ohne Bewegung bleibt das Titelbild einfach stehen. */
+@media (prefers-reduced-motion: reduce){
+  .dive{ position: absolute; }
+  .dive__photo{ transform: none !important; filter: none !important; }
+}
+
+/* ------------------------------------------------------------
+   12. Abschnitt mit Bewegtbild im Hintergrund
+   ------------------------------------------------------------ */
+.section--media{ position: relative; overflow: hidden; }
+/* Alles ausser der Medienebene gehoert nach vorn. */
+.section--media > *:not(.media){ position: relative; z-index: 1; }
