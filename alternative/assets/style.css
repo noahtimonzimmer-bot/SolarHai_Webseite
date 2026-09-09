@@ -79,6 +79,8 @@ button{ font-family: inherit; }
 .btn--ghost:hover{ border-color: var(--violet); color: var(--violet); transform: translateY(-2px); }
 .btn--lg{ padding:1rem 2.1rem; font-size:1.02rem; min-height:54px; }
 .btn--sm{ padding:.6rem 1.3rem; font-size:.92rem; min-height:44px; }
+/* grosser Knopf: fuehrt von der Kontaktseite zum Anfrageformular */
+.btn--xl{ padding:1.25rem 3rem; font-size:1.15rem; min-height:66px; }
 .btn--block{ width:100%; }
 .btn:active{ transform: translateY(0); }
 
@@ -162,7 +164,8 @@ button{ font-family: inherit; }
   min-height: calc(100svh - var(--chrome-h, 0px));
   /* Titel sitzt unten links, Bild bleibt oben und rechts frei */
   display:flex; align-items:flex-end; justify-content:flex-start;
-  padding: clamp(3rem,7vw,5rem) clamp(1.25rem,4vw,3rem) clamp(7.5rem,10vw,9rem);
+  padding: clamp(3rem,7vw,5rem) clamp(1.25rem,4vw,3rem) clamp(9rem,14vw,13rem);
+  padding-left: clamp(1.5rem,9vw,10rem);
   color:#fff;
 }
 .hero .media{ background: var(--bg-dark); }
@@ -553,6 +556,13 @@ button{ font-family: inherit; }
 }
 .form button{ grid-column:1 / -1; margin-top:.4rem; }
 .form__success{ grid-column:1 / -1; margin:0; color: var(--violet); font-size:.96rem; font-weight:600; }
+/* Knopf statt Formular: steht allein und mittig unter der Ueberschrift */
+.form__link{ display:flex; justify-content:center; margin:0; }
+
+/* Verstecktes Feld gegen Bots — nie sichtbar, auch nicht fuer Vorlesegeraete */
+.form__trap{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+.form__error{ grid-column:1 / -1; margin:0; color:#b91c1c; font-size:.96rem; font-weight:600; }
+
 
 /* ---------- Contact blocks ---------- */
 .contact{ max-width: var(--container); margin:0 auto 3rem; display:grid; grid-template-columns: repeat(3,1fr); gap:1.25rem; }
@@ -635,7 +645,9 @@ a.contact-card--wide:hover{ border-color: var(--violet-light); }
   display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:2.5rem;
   padding-bottom:2.5rem; border-bottom:1px solid rgba(255,255,255,.12);
 }
-.footer__brand img{ height:36px; margin-bottom:1rem; }
+/* ohne width:auto zieht die Breite aus dem width-Attribut (130) das Logo
+   auf 36px Hoehe in die Breite */
+.footer__brand img{ height:36px; width:auto; margin-bottom:1rem; }
 .footer__brand p{ font-size:.93rem; max-width:32ch; color: rgba(255,255,255,.66); }
 .socials{ display:flex; gap:.6rem; margin-top:1rem; }
 .socials a{
@@ -731,12 +743,15 @@ a.contact-card--wide:hover{ border-color: var(--violet-light); }
   .steps{ grid-template-columns:1fr; }
   .form{ grid-template-columns:1fr; padding:1.5rem; }
   .footer__top{ grid-template-columns:1fr 1fr; }
-  .nav__cta{ display:none; }
+  /* Der Anfrage-Knopf bleibt auch auf dem Handy sichtbar, nur schmaler.
+     nowrap: sonst bricht die Beschriftung auf schmalen Geraeten um. */
+  .nav{ gap:.75rem; }
+  .nav__cta{ padding:.5rem 1rem; font-size:.86rem; min-height:40px; white-space:nowrap; }
   .actions .btn{ width:100%; }
-  /* Im Hero bleiben die Wege links buendig, der Textlink wird nicht breit */
+  /* Auf dem Handy bleibt nur der eine Weg: die kostenlose Anfrage */
   .hero .actions{ flex-direction:column; align-items:flex-start; gap:1.1rem; }
   .hero .actions .btn--primary{ width:auto; }
-  .hero .actions .btn--ghost{ width:auto; }
+  .hero .actions .btn--ghost{ display:none; }
   /* Platz unten, damit der Scrollhinweis nicht auf der Schlagwortzeile liegt */
   .hero{ padding-bottom: 8rem; }
   /* Beim Umbruch stuende sonst ein Trennpunkt am Zeilenanfang */
@@ -744,6 +759,8 @@ a.contact-card--wide:hover{ border-color: var(--violet-light); }
   .hero .badges li + li::before{ content:none; }
 }
 @media (max-width: 420px){
+  .nav{ padding-inline:.9rem; }
+  .nav__cta{ padding:.45rem .8rem; font-size:.8rem; }
   .stats{ grid-template-columns:1fr; }
   .footer__top{ grid-template-columns:1fr; }
 }

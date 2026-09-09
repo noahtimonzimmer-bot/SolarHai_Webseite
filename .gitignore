@@ -22,3 +22,7 @@ Desktop.ini
 
 # Rohmaterial der Videos (4K-Originale) bleibt lokal
 _unused/*.mp4
+
+# Rohaufnahmen der Referenzen (die zugeschnittenen Fassungen liegen daneben)
+assets/img/referenzen/DJI_0397.JPG
+assets/img/referenzen/Siebnen Galgenen Reiheneinfamielienhaus 5.8kwp.JPG

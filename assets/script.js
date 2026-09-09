@@ -124,22 +124,6 @@ if ('IntersectionObserver' in window) {
   videos.forEach(v => videoObserver.observe(v));
 }
 
-// Anfrage form (no backend yet — shows confirmation only). Only present on ueber-uns.html.
-const form = document.getElementById('anfrageForm');
-if (form) {
-  const success = document.getElementById('formSuccess');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
-    success.hidden = false;
-    form.reset();
-    form.querySelectorAll('input, textarea, select, button').forEach(el => { el.disabled = true; });
-  });
-}
-
 // Safety net: if IntersectionObserver never fires (background tab, blocked API),
 // content must not stay invisible and counters must not stay at 0.
 setTimeout(() => {
