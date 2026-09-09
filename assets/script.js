@@ -267,3 +267,34 @@ if (location.hash.length > 1) {
     setTimeout(springeZumAnker, 250);
   });
 }
+
+
+/* ---------- Fortschritt des Scrollens ----------
+   Ein feiner Balken am unteren Rand der Navigation zeigt, wie weit die
+   Seite schon gelesen ist. Der Balken wird hier erzeugt, damit er auf
+   jeder Seite erscheint, ohne dass jede Datei angepasst werden muss. */
+if (nav) {
+  const progress = document.createElement('div');
+  progress.className = 'scrollprogress';
+  const bar = document.createElement('span');
+  bar.className = 'scrollprogress__bar';
+  progress.appendChild(bar);
+  nav.appendChild(progress);
+
+  let ticking = false;
+  function updateProgress() {
+    ticking = false;
+    const doc = document.documentElement;
+    const scrollbar = doc.scrollHeight - window.innerHeight;
+    const anteil = scrollbar > 0 ? Math.min(Math.max(window.scrollY / scrollbar, 0), 1) : 0;
+    bar.style.width = (anteil * 100).toFixed(2) + '%';
+  }
+  function queueProgress() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateProgress);
+  }
+  window.addEventListener('scroll', queueProgress, { passive: true });
+  window.addEventListener('resize', queueProgress);
+  updateProgress();
+}
