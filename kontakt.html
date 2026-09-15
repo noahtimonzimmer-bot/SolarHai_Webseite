@@ -7,8 +7,8 @@
 <meta name="description" content="Kontakt zur SolarHai GmbH: Telefon +41 77 237 93 61, info@solarhai.ch, Pfäffikon und Tuggen. Kostenlose Anfrage — Angebot innerhalb 72h.">
 <link rel="icon" type="image/png" href="assets/img/logo-violet.png">
 <link rel="preload" href="assets/fonts/manrope-700-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/fonts.css?v=20260909">
-<link rel="stylesheet" href="assets/style.css?v=20260909">
+<link rel="stylesheet" href="assets/fonts.css?v=2026091502">
+<link rel="stylesheet" href="assets/style.css?v=2026091502">
 </head>
 <body>
 
@@ -90,14 +90,10 @@
       <h2>Kostenlos — Angebot innerhalb <span class="v">72h</span>.</h2>
       <p class="lead">Unverbindlich und ohne Verpflichtung. Wir melden uns innerhalb von zwei Werktagen.</p>
     </div>
-    <!-- Das Anfrageformular liegt auf einer eigenen Seite. Sobald die
-         Adresse feststeht, hier im href eintragen. -->
-    <p class="form__link">
-      <a class="btn btn--primary btn--xl" href="#" id="anfrageLink">
-        Anfrage starten
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </p>
+    <!-- Anfrageformular von Reonic (Energiehaus-Konfigurator) -->
+    <div class="reonic">
+      <div data-reonic-type="element" data-product="energyhouse" data-client-id="12ab7d02-4f65-4dea-a27a-4266e11c62ea"></div>
+    </div>
   </section>
 
   <section class="section">
@@ -171,6 +167,7 @@
   </div>
 </footer>
 
-<script src="assets/script.js?v=20260909"></script>
+<script src="assets/script.js?v=2026091502"></script>
+<script type="text/javascript" src="https://apps.reonic.de/elements/reonic-loader.js" defer="1"></script>
 </body>
 </html>

@@ -272,6 +272,18 @@ button{ font-family: inherit; }
   0%,100%{ transform: translateY(0); }
   50%{ transform: translateY(6px); }
 }
+/* Querformat: das Hero-Video ist 3:2 geschnitten und soll moeglichst ganz zu sehen
+   sein. Der Bereich wird deshalb bis zu 25svh hoeher als der Bildschirm; Titel und
+   Scroll-Hinweis rutschen um denselben Betrag hoch und bleiben im ersten Blick. */
+@media (orientation: landscape) and (min-width: 941px){
+  .hero{
+    --hero-screen: calc(100svh - var(--chrome-h, 0px));
+    --hero-extra: max(0px, min(66.667vw, var(--hero-screen) + 25svh) - var(--hero-screen));
+    min-height: calc(var(--hero-screen) + var(--hero-extra));
+    padding-bottom: calc(clamp(9rem,14vw,13rem) + var(--hero-extra));
+  }
+  .hero__scroll{ bottom: calc(clamp(1.5rem,4vw,2.75rem) + var(--hero-extra)); }
+}
 
 /* Sprungziele nicht unter die klebende Navigation schieben */
 [id]{ scroll-margin-top: 88px; }
@@ -556,6 +568,9 @@ button{ font-family: inherit; }
 }
 .form button{ grid-column:1 / -1; margin-top:.4rem; }
 .form__success{ grid-column:1 / -1; margin:0; color: var(--violet); font-size:.96rem; font-weight:600; }
+/* Eingebettetes Reonic-Formular: volle Breite des Inhalts, mittig */
+.reonic{ max-width: 960px; margin: 0 auto; }
+
 /* Knopf statt Formular: steht allein und mittig unter der Ueberschrift */
 .form__link{ display:flex; justify-content:center; margin:0; }
 

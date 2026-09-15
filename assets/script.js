@@ -103,9 +103,13 @@ if ('IntersectionObserver' in window) {
 // Background videos.
 // Missing files are expected until the videos are uploaded — drop the element then,
 // so the CSS gradient fallback shows instead of a stalled <video>.
+// Only the last <source> counts: the browser also fires "error" on a source whose
+// media query does not match (hero: portrait vs. landscape) and then tries the next one.
 const videos = document.querySelectorAll('.media__video');
 videos.forEach(video => {
-  video.addEventListener('error', () => video.remove(), true);
+  const sources = video.querySelectorAll('source');
+  const last = sources[sources.length - 1] || video;
+  last.addEventListener('error', () => video.remove());
 });
 
 // Pause offscreen videos to save bandwidth and CPU
@@ -228,28 +232,47 @@ document.querySelectorAll('.year').forEach(el => {
 /* Ankersprung beim Seitenaufruf (z. B. kontakt.html#anfrage).
    Mit scroll-behavior:smooth bricht der Browser den Sprung ab, sobald waehrend
    der Animation noch Bilder oder Schriften eintreffen und sich das Layout
-   verschiebt — man landet dann oben statt beim Ziel. Darum nach dem
-   vollstaendigen Laden einmal hart nachfassen. */
+   verschiebt — man landet dann oben statt beim Ziel. Darum sofort hart springen
+   und nachfassen, solange das Layout sich noch setzt.
+   Nicht erst auf "load" warten: auf der Kontaktseite kommt das erst, wenn das
+   Reonic-Formular fertig geladen ist, und bis dahin stuende man oben. */
 if (location.hash.length > 1) {
   // Der Browser stellt nach dem Laden seine gemerkte Scrollposition wieder her
   // und wuerde unseren Sprung gleich wieder ueberschreiben.
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
-  const springeZumAnker = () => {
-    const ziel = document.getElementById(decodeURIComponent(location.hash.slice(1)));
-    if (!ziel) return;
-    const vorher = document.documentElement.style.scrollBehavior;
-    document.documentElement.style.scrollBehavior = 'auto';
-    ziel.scrollIntoView();
-    document.documentElement.style.scrollBehavior = vorher;
-  };
+  const ziel = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (ziel) {
+    let losgelassen = false;
+    const springeZumAnker = () => {
+      if (losgelassen) return;
+      const vorher = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = 'auto';
+      ziel.scrollIntoView();
+      document.documentElement.style.scrollBehavior = vorher;
+    };
 
-  // zweimal nachfassen: direkt nach dem Laden und noch einmal, wenn spaet
-  // eintreffende Bilder das Layout nachtraeglich verschoben haben
-  window.addEventListener('load', () => {
+    // sobald der Besucher selbst scrollt oder tippt, bleibt die Seite, wo sie ist
+    const loslassen = () => { losgelassen = true; };
+    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(typ =>
+      window.addEventListener(typ, loslassen, { once: true, passive: true }));
+
+    springeZumAnker();
     requestAnimationFrame(springeZumAnker);
-    setTimeout(springeZumAnker, 250);
-  });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(springeZumAnker);
+
+    // Schriften, Bilder und das Formular veraendern die Seitenhoehe noch eine
+    // Weile; so lange bei jeder Aenderung nachfassen
+    if ('ResizeObserver' in window) {
+      const beobachter = new ResizeObserver(springeZumAnker);
+      beobachter.observe(document.body);
+      setTimeout(() => beobachter.disconnect(), 6000);
+    }
+    window.addEventListener('load', () => {
+      requestAnimationFrame(springeZumAnker);
+      setTimeout(springeZumAnker, 250);
+    });
+  }
 }
 
 

@@ -556,6 +556,9 @@ button{ font-family: inherit; }
 }
 .form button{ grid-column:1 / -1; margin-top:.4rem; }
 .form__success{ grid-column:1 / -1; margin:0; color: var(--violet); font-size:.96rem; font-weight:600; }
+/* Eingebettetes Reonic-Formular: volle Breite des Inhalts, mittig */
+.reonic{ max-width: 960px; margin: 0 auto; }
+
 /* Knopf statt Formular: steht allein und mittig unter der Ueberschrift */
 .form__link{ display:flex; justify-content:center; margin:0; }
 
